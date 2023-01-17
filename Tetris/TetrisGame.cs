@@ -13,9 +13,6 @@ namespace Tetris
         public bool Running { get; private set; }
 
         private int _gameSpeed = 1000;
-        private int _curSpeed = 1000;
-
-        private int _lastShape = 0;
 
         private PlayField _playfield;
 
@@ -46,23 +43,6 @@ namespace Tetris
             gameTimer.Interval = _gameSpeed;
             gameTimer.Start();
 
-
-            //// Main gameplay loop
-            //while (Running)
-            //{
-            //    // Create falling block object if it doesn't exist
-            //    if (_fallingShape == null)
-            //    {
-            //        var _newshape = RandomShape();
-            //        _playfield.Add(_newshape);
-            //        _fallingShape = _newshape;
-            //        graphicsService.DrawShape(_fallingShape);
-            //    }
-
-            //    await Task.Delay(_curSpeed);
-
-            //    DropShape(_fallingShape);
-            //}
         }
 
         public void gameTimerTick(object source, ElapsedEventArgs e)
@@ -102,15 +82,6 @@ namespace Tetris
             //    graphicsService.DrawShape(_fallingShape);
             //}
         }
-
-        //public void KeyUp(KeyEventArgs e)
-        //{
-        //    if (e.KeyCode == Keys.Down)
-        //    {
-        //        // Restore normal gamespeed
-        //        _curSpeed = _gameSpeed;
-        //    }
-        //}
 
         private void DropFallingShape()
         {
