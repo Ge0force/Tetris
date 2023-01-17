@@ -23,10 +23,10 @@ namespace Tetris
         private void Form1_Load(object sender, EventArgs e)
         {
 
-            // Create framebuffer to draw on
+            // Create framebuffer
             _drawingArea = new Bitmap(this.ClientRectangle.Width, this.ClientRectangle.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
-            // Create graphics object that the GraphicsService needs to draw on
+            // Create graphics object that GraphicsService needs to draw on
             Graphics oGraphics;
             oGraphics = Graphics.FromImage(_drawingArea);
 
@@ -42,7 +42,13 @@ namespace Tetris
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             // Handle keys pressed
-            _gameLoop.ReadKey(e);
+            _gameLoop.KeyDown(e);
+        }
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            // Handle keys released
+            _gameLoop.KeyUp(e);
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)

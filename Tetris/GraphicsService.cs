@@ -8,46 +8,45 @@ namespace Tetris
 {
     public class GraphicsService
     {
+        private const int _blockSize = 35;
+        private const int _leftMargin = 100;
+
         private Graphics _graphicsObj;
         private Form _formObj;
 
-        private int _blockSize;
-
         private SolidBrush _myBrush = new SolidBrush(Color.Black);
-        private Pen _myPen = new Pen(Color.White);
+        private Pen _myPen = new Pen(Color.Black);
 
         public GraphicsService(Form parentForm, Graphics gfx)
         {
             _formObj = parentForm;
             _graphicsObj = gfx;
-            
-            // Calculate size of a single block based on the form height
-            _blockSize = _formObj.ClientRectangle.Height / 18;
         }
 
-        public void DrawBlock(Block block, bool eraseBlock)
+        public void EraseShape(IShape shape)
         {
-            Color penColor = eraseBlock ? Color.Black : block.penColor;
-            Color brushColor = eraseBlock ? Color.Black : block.brushColor;
-
-            for (int y = 0; y < 3; y++)   // Must be block.size
+            foreach (Point p in shape.Pattern)
             {
-                for (int x = 0; x < 3; x++)
-                {
-                    if (block.Pattern[x, y] == true)
-                    {
-                        DrawSingleBlock(block.Xpos + x, block.Ypos + y, penColor, brushColor);
-                    }
-                }
+                DrawSingleBlock(p.X + shape.Position.X, p.Y + shape.Position.Y, Color.Black, Color.Black);
+            }
+
+        }
+
+        public void DrawShape(IShape shape)
+        {
+            foreach (Point p in shape.Pattern)
+            {
+                DrawSingleBlock(p.X + shape.Position.X, p.Y + shape.Position.Y, shape.PenColor, shape.BrushColor);
             }
         }
 
-        public void DrawSingleBlock(int _left, int _top, Color penColor, Color brushColor)
+        public void DrawSingleBlock(int xPos, int yPos, Color penColor, Color brushColor)
         {
-            int xPos = 100 + ((_left +1) * _blockSize);
-            int yPos = (_top * _blockSize) - 1;
+            xPos = _leftMargin + ((xPos) * (_blockSize + 1));
+            yPos = (yPos * (_blockSize + 1));
 
             _myPen.Color = penColor;
+            _myPen.Width = 1;
             _myBrush.Color = brushColor;
 
             Rectangle rect = new Rectangle(xPos, yPos, _blockSize, _blockSize);
@@ -57,21 +56,20 @@ namespace Tetris
             _formObj.Invalidate();
         }
 
-
-        public void DrawPlayfield()
+        public void DrawPlayfield(int playfieldWidth, int playfieldHeight)
         {
             _graphicsObj.FillRectangle(_myBrush, new Rectangle(- 1, - 1, 1000, 1000));
 
-            for (int i = 0; i < 18; i++) 
+            for (int i = 0; i < playfieldHeight; i++) 
             {
-                DrawBrick(100, (i * _blockSize) - 1, (i % 2) == 0);
-                DrawBrick(100 + (_blockSize * 12), (i * _blockSize) - 1, (i % 2) == 0);
+                DrawBrick(_leftMargin, (i * (_blockSize + 1)), (i % 2) == 0);
+                DrawBrick(_leftMargin + ((_blockSize + 1) * (playfieldWidth + 1)), (i * (_blockSize + 1)), (i % 2) == 0);
             }
 
             _formObj.Invalidate();
         }
 
-        private void DrawBrick( int xpos, int ypos, bool odd)
+        private void DrawBrick( int xPos, int yPos, bool odd)
         {
             Pen grayPen = new Pen(Color.Gray);
             Pen darkRedPen = new Pen(Color.DarkRed);
@@ -80,22 +78,22 @@ namespace Tetris
 
             SolidBrush darkRedBrush = new SolidBrush(Color.DarkRed);
 
-            Rectangle rect = new Rectangle(xpos, ypos, _blockSize, _blockSize);
-            Rectangle rect2 = new Rectangle(xpos + 1, ypos + 1, _blockSize - 2, _blockSize - 2);
+            Rectangle rect = new Rectangle(xPos, yPos, _blockSize, _blockSize);
+            Rectangle rect2 = new Rectangle(xPos + 1, yPos + 1, _blockSize - 2, _blockSize - 2);
 
             _graphicsObj.DrawRectangle(darkRedPen, rect);
             _graphicsObj.FillRectangle(darkRedBrush, rect);
 
-            _graphicsObj.DrawLine(grayPen, xpos, ypos, xpos + _blockSize, ypos);
+            _graphicsObj.DrawLine(grayPen, xPos, yPos, xPos + _blockSize, yPos);
 
             if (odd)
             {
-                _graphicsObj.DrawLine(grayPen, xpos + (_blockSize / 2), ypos, xpos + (_blockSize / 2), ypos + _blockSize);
+                _graphicsObj.DrawLine(grayPen, xPos + (_blockSize / 2), yPos, xPos + (_blockSize / 2), yPos + _blockSize);
             }
             else
             {
-                _graphicsObj.DrawLine(grayPen, xpos + (_blockSize / 5), ypos, xpos + (_blockSize / 5), ypos + _blockSize);
-                _graphicsObj.DrawLine(grayPen, xpos + (_blockSize / 5 * 4), ypos, xpos + (_blockSize / 5 * 4), ypos + _blockSize);
+                _graphicsObj.DrawLine(grayPen, xPos + (_blockSize / 5), yPos, xPos + (_blockSize / 5), yPos + _blockSize);
+                _graphicsObj.DrawLine(grayPen, xPos + (_blockSize / 5 * 4), yPos, xPos + (_blockSize / 5 * 4), yPos + _blockSize);
             }
 
         }

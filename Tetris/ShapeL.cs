@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tetris
+﻿namespace Tetris
 {
-    public class ShapeT: IShape
+    public class ShapeL : IShape
     {
         public Point Position { get; set; }
         public int Rotation { get; set; }
@@ -16,18 +10,18 @@ namespace Tetris
         public Color PenColor { get; set; }
         public Color BrushColor { get; set; }
 
-        public ShapeT()
+        public ShapeL()
         {
-            Position = new Point(4, 1);
+            Position = new Point(4, 0);
 
-            Rotation= 0;
-            MaxRotation= 4;
-            PenColor = Color.FromArgb(255, 155, 38, 182);
-            BrushColor = Color.FromArgb(100, 155, 38, 182);
+            Rotation = 0;
+            MaxRotation = 4;
+            PenColor = Color.FromArgb(255, 0, 40, 255);
+            BrushColor = Color.FromArgb(100, 0, 40, 255);
 
             Pattern = new List<Point>();
             Pattern.Add(new Point(0, 1));
-            Pattern.Add(new Point(1, 0));
+            Pattern.Add(new Point(0, 2));
             Pattern.Add(new Point(1, 1));
             Pattern.Add(new Point(2, 1));
 
