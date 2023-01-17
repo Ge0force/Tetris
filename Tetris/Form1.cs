@@ -7,7 +7,7 @@ namespace Tetris
     {
         
         private GraphicsService _graphicsService;       // Class to handle the graphics
-        private GameLoop _gameLoop;                     // Class to handle the gameloop
+        private TetrisGame _gameLoop;                     // Class to handle the gameloop
                 
         private Bitmap _drawingArea;                    // Area to draw on
 
@@ -34,7 +34,7 @@ namespace Tetris
             _graphicsService = new GraphicsService(this, oGraphics);
 
             // Create and start game loop
-            _gameLoop = new GameLoop(_graphicsService);
+            _gameLoop = new TetrisGame(_graphicsService);
             _gameLoop.Start();
 
         }
@@ -43,12 +43,6 @@ namespace Tetris
         {
             // Handle keys pressed
             _gameLoop.KeyDown(e);
-        }
-
-        private void Form1_KeyUp(object sender, KeyEventArgs e)
-        {
-            // Handle keys released
-            _gameLoop.KeyUp(e);
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)

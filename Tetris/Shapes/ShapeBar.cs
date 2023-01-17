@@ -1,15 +1,7 @@
-﻿namespace Tetris
+﻿namespace Tetris.Shapes
 {
-    public class ShapeBar : IShape
+    public class ShapeBar : BaseShape
     {
-        public Point Position { get; set; }
-        public int Rotation { get; set; }
-        public int MaxRotation { get; set; }
-        public List<Point> Pattern { get; set; }
-        public Point Pivot { get; set; }
-        public Color PenColor { get; set; }
-        public Color BrushColor { get; set; }
-
         public ShapeBar()
         {
             Position = new Point(4, -1);

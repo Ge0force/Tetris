@@ -4,24 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tetris
+namespace Tetris.Shapes
 {
-    public class ShapeT: IShape
+    public class ShapeT : BaseShape
     {
-        public Point Position { get; set; }
-        public int Rotation { get; set; }
-        public int MaxRotation { get; set; }
-        public List<Point> Pattern { get; set; }
-        public Point Pivot { get; set; }
-        public Color PenColor { get; set; }
-        public Color BrushColor { get; set; }
-
         public ShapeT()
         {
             Position = new Point(4, 1);
 
-            Rotation= 0;
-            MaxRotation= 4;
+            Rotation = 0;
+            MaxRotation = 4;
             PenColor = Color.FromArgb(255, 155, 38, 182);
             BrushColor = Color.FromArgb(100, 155, 38, 182);
 
