@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tetris.Shapes;
+﻿using Tetris.Shapes;
 
 namespace Tetris
 {
@@ -25,7 +20,7 @@ namespace Tetris
             FieldWidth = width;
             FieldHeight = height;
 
-            FallingShape = SpawnRandomShape();
+            SpawnRandomShape();
         }
         public bool CheckCollissons()
         {
@@ -59,7 +54,7 @@ namespace Tetris
             return true;
         }
 
-        public IShape SpawnRandomShape()
+        public void SpawnRandomShape()
         {
             // Roll random number between 0 and 7
             Random rd = new Random();
@@ -86,8 +81,6 @@ namespace Tetris
             }
 
             Field.Add(FallingShape);
-
-            return FallingShape;
         }
 
     }

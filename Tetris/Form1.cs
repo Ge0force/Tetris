@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using System.Timers;
-
-namespace Tetris
+﻿namespace Tetris
 {
     public partial class Form1 : Form
     {
@@ -23,7 +20,7 @@ namespace Tetris
         private void Form1_Load(object sender, EventArgs e)
         {
 
-            // Create framebuffer
+            // Create framebuffer bitmap
             _drawingArea = new Bitmap(this.ClientRectangle.Width, this.ClientRectangle.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
             // Create graphics object that GraphicsService needs to draw on
@@ -54,7 +51,7 @@ namespace Tetris
 
                 objGraphics.DrawImage(_drawingArea, 0, 0, _drawingArea.Width, _drawingArea.Height);
 
-            //    This gives a crash when using double buffer!
+            //    This generated an exception when using double buffer!
             //    objGraphics.Dispose();
             }
 

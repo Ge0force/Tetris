@@ -1,28 +1,28 @@
 ﻿using System.Timers;
-using Tetris.Shapes;
 
 namespace Tetris
 {
     public class TetrisGame
     {
+        public bool Running { get; private set; }
+
         System.Timers.Timer gameTimer;
+
+        GraphicsService graphicsService;
+
+        private PlayField _playfield;
 
         public const int _playfieldWidth = 10;
         public const int _playfieldHeight = 18;
 
-        public bool Running { get; private set; }
-
         private int _gameSpeed = 1000;
-
-        private PlayField _playfield;
-
-        GraphicsService graphicsService;
 
         public TetrisGame(GraphicsService gs)
         {
             graphicsService = gs;
         }
 
+        // Start new game
         public void Start()
         {
             // Create playfield
@@ -42,47 +42,15 @@ namespace Tetris
             gameTimer.Elapsed += new ElapsedEventHandler(gameTimerTick);
             gameTimer.Interval = _gameSpeed;
             gameTimer.Start();
-
         }
 
+        // Drop the falling shape each timer tick
         public void gameTimerTick(object source, ElapsedEventArgs e)
         {
             DropFallingShape();
         }
 
-        public void KeyDown(KeyEventArgs e)
-        {
-            //if (_fallingShape != null)
-            //{
-
-            //    graphicsService.EraseShape(_fallingShape);
-
-            //    if (e.KeyCode == Keys.Left)
-            //    {
-            //        _fallingShape.Position.X -= 1;
-            //        if (!ShapeCanMove(_fallingShape)) { _fallingShape.Position.X += 1; }
-
-            //    }
-            //    else if (e.KeyCode == Keys.Right)
-            //    {
-            //        _fallingShape.Position.X += 1;
-            //        if (!ShapeCanMove(_fallingShape)) { _fallingShape.Position.X -= 1; }
-            //    }
-            //    else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Space)
-            //    {
-            //        _fallingShape.Rotate();
-            //        if (!ShapeCanMove(_fallingShape)) { _fallingShape.Rotate(true); }
-            //    }
-            //    else if (e.KeyCode == Keys.Down)
-            //    {
-            //        // Fasten gamespeed
-            //        _curSpeed = _gameSpeed / 15;
-            //    }
-
-            //    graphicsService.DrawShape(_fallingShape);
-            //}
-        }
-
+        // Drop the falling shape
         private void DropFallingShape()
         {
             // Erase the shape 
@@ -110,9 +78,55 @@ namespace Tetris
 
                 // Draw the falling shape
                 graphicsService.DrawShape(_playfield.FallingShape);
+
+                // Check for gameover
+
+
             }
 
         }
 
+        // Keyboard input
+        public void KeyDown(KeyEventArgs e)
+        {
+            if (Running)
+            {
+                if (e.KeyCode == Keys.Down)
+                {
+                    // Drop the falling shape immediately
+                    // Falling shape is redrawn in the DropFallingShape method!
+                    DropFallingShape();
+
+                    // Reset gametimer
+                    gameTimer.Stop();
+                    gameTimer.Start();
+                }
+                else
+                {
+                    // Erase the shape 
+                    graphicsService.EraseShape(_playfield.FallingShape);
+
+                    if (e.KeyCode == Keys.Left)
+                    {
+                        _playfield.FallingShape.Position.X -= 1;
+                        if (!_playfield.CheckCollissons()) { _playfield.FallingShape.Position.X += 1; }
+
+                    }
+                    else if (e.KeyCode == Keys.Right)
+                    {
+                        _playfield.FallingShape.Position.X += 1;
+                        if (!_playfield.CheckCollissons()) { _playfield.FallingShape.Position.X -= 1; }
+                    }
+                    else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Space)
+                    {
+                        _playfield.FallingShape.Rotate();
+                        if (!_playfield.CheckCollissons()) { _playfield.FallingShape.Rotate(true); }
+                    }
+
+                    // Draw the falling shape
+                    graphicsService.DrawShape(_playfield.FallingShape);
+                }
+            }
+        }
     }
 }

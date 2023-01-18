@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tetris
+﻿namespace Tetris
 {
     public class GraphicsService
     {
@@ -46,7 +40,6 @@ namespace Tetris
             yPos = (yPos * (_blockSize + 1));
 
             _myPen.Color = penColor;
-            _myPen.Width = 1;
             _myBrush.Color = brushColor;
 
             Rectangle rect = new Rectangle(xPos, yPos, _blockSize, _blockSize);
