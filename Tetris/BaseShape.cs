@@ -12,6 +12,7 @@
 
         public int LeftMargin() => Position.X + Pattern.Min(point => point.X);
         public int RightMargin() => Position.X + Pattern.Max(point => point.X);
+        public int TopMargin() => Position.Y + Pattern.Min(point => point.Y);
         public int BottomMargin() => Position.Y + Pattern.Max(point => point.Y);
 
         public void Rotate(bool backwards = false)

@@ -19,6 +19,7 @@ namespace Tetris
 
         public TetrisGame(GraphicsService gs)
         {
+            // Class that provides the graphics
             graphicsService = gs;
         }
 
@@ -50,7 +51,7 @@ namespace Tetris
             DropFallingShape();
         }
 
-        // Drop the falling shape
+        // Drop the falling shape and check for collisions
         private void DropFallingShape()
         {
             // Erase the shape 
@@ -66,21 +67,35 @@ namespace Tetris
             }
             else
             {
+                gameTimer.Stop();
+
                 // Restore shape on original position
                 _playfield.FallingShape.Position.Y -= 1;
                 graphicsService.DrawShape(_playfield.FallingShape);
 
-                // Check for full line
+                // When the falling shape is stuck at the top line -> Game Over!
+                if(_playfield.FallingShape.TopMargin() <= 1)
+                {
+                    Running = false;
+                    graphicsService.DisplayGameOver();
+                }
+                else
+                {
+                    // Check for full lines
+                    List<int> fullLines = _playfield.CheckFullLines();
 
-                                
-                // Create new random shape
-                _playfield.SpawnRandomShape();
+                    // Instead removing the affected lines with animation, just redraw all shapes when lines are removed
+                    if (fullLines.Count > 0)
+                    { 
+                        graphicsService.RedrawShapes(_playfield.Field, _playfieldWidth, _playfieldHeight);
+                    }
 
-                // Draw the falling shape
-                graphicsService.DrawShape(_playfield.FallingShape);
+                    // Create new random shape
+                    _playfield.SpawnRandomShape();
+                    graphicsService.DrawShape(_playfield.FallingShape);
+                }
 
-                // Check for gameover
-
+                gameTimer.Start();
 
             }
 

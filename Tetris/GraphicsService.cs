@@ -1,4 +1,7 @@
-﻿namespace Tetris
+﻿using System.Drawing.Text;
+using static System.Windows.Forms.DataFormats;
+
+namespace Tetris
 {
     public class GraphicsService
     {
@@ -89,6 +92,43 @@
                 _graphicsObj.DrawLine(grayPen, xPos + (_blockSize / 5 * 4), yPos, xPos + (_blockSize / 5 * 4), yPos + _blockSize);
             }
 
+        }
+
+        public void DisplayGameOver()
+        {
+            _graphicsObj.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+
+            Rectangle rect = new Rectangle(_leftMargin + (3 * _blockSize), 7 * _blockSize, 7 * _blockSize, 2 * _blockSize);
+
+            _graphicsObj.DrawRectangle(Pens.Yellow, rect);
+            _graphicsObj.FillRectangle(Brushes.Yellow, rect);
+
+            StringFormat format = new StringFormat()
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
+
+            // Draw the text onto the image
+            _graphicsObj.DrawString("GAME OVER", new Font("Tahoma", 14), Brushes.Black, rect, format);
+
+            _formObj.Invalidate();
+        }
+
+        public void RedrawShapes(List<IShape> shapes, int playfieldWidth, int playfieldHeight)
+        {
+            // Clear inside of the playfield
+            Rectangle rect = new Rectangle(_leftMargin + _blockSize + 1, 0, playfieldWidth * (_blockSize + 1), playfieldHeight * (_blockSize + 1));
+            _graphicsObj.DrawRectangle(Pens.Black, rect);
+            _graphicsObj.FillRectangle(Brushes.Black, rect);
+
+            // Draw all shapes
+            foreach (var s in shapes) 
+            {
+                DrawShape(s);
+            }
+
+            _formObj.Invalidate();
         }
 
     }

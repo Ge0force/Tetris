@@ -83,5 +83,67 @@ namespace Tetris
             Field.Add(FallingShape);
         }
 
+        public List<int> CheckFullLines()
+        {
+            var fullLines = new List<int>();
+
+            // Check lines from top to bottom            
+            //for (int i = (FieldHeight - 1); i > 1; i--)
+            for (int i = 0; i < FieldHeight; i++)
+            {
+                // Count the number of points at line i
+                int counter = 0;
+
+                foreach (IShape s in Field)
+                {
+                    foreach (Point p in s.Pattern)
+                    {
+                        if (p.Y + s.Position.Y == i) counter++;
+                    }
+                }
+
+                // Line is full if points = fieldwidth
+                if (counter == FieldWidth)
+                {
+                    // Add to list for graphics animation
+                    fullLines.Add(i);
+
+                    // We can't remove object in a foreach loop, so we'll save that for later
+                    List<Point> pointsToRemove = new List<Point>();
+                    List<IShape> shapesToRemove = new List<IShape>();
+
+                    foreach (IShape s in Field)
+                    {
+                        foreach (Point p in s.Pattern)
+                        {
+                            // Remove points at that line
+                            if (p.Y + s.Position.Y == i) pointsToRemove.Add(p);
+
+                            // Remove shape if no points left in pattern
+                            if (s.Pattern.Count == 0) shapesToRemove.Add(s);
+
+                            // All lines above the removed line should drop
+                            if (p.Y + s.Position.Y < i) p.Y++;
+                        }
+
+                        // Remove points
+                        foreach (Point p in pointsToRemove)
+                        {
+                            s.Pattern.Remove(p);
+                        }
+                    }
+
+                    // Remove shapes
+                    foreach(IShape s in shapesToRemove)
+                    {
+                        Field.Remove(s);
+                    }
+
+                }
+            }
+
+            return fullLines;
+        }
+
     }
 }

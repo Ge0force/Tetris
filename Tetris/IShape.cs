@@ -17,6 +17,7 @@
 
         int LeftMargin();
         int RightMargin();
+        int TopMargin();
         int BottomMargin();
     }
 }
