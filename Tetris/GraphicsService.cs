@@ -11,9 +11,6 @@ namespace Tetris
         private Graphics _graphicsObj;
         private Form _formObj;
 
-        private SolidBrush _myBrush = new SolidBrush(Color.Black);
-        private Pen _myPen = new Pen(Color.Black);
-
         public GraphicsService(Form parentForm, Graphics gfx)
         {
             _formObj = parentForm;
@@ -39,6 +36,9 @@ namespace Tetris
 
         public void DrawSingleBlock(int xPos, int yPos, Color penColor, Color brushColor)
         {
+            SolidBrush _myBrush = new SolidBrush(brushColor);
+            Pen _myPen = new Pen(penColor);
+
             xPos = _leftMargin + ((xPos) * (_blockSize + 1));
             yPos = (yPos * (_blockSize + 1));
 
@@ -54,7 +54,7 @@ namespace Tetris
 
         public void DrawPlayfield(int playfieldWidth, int playfieldHeight)
         {
-            _graphicsObj.FillRectangle(_myBrush, new Rectangle(- 1, - 1, 1000, 1000));
+            _graphicsObj.FillRectangle(Brushes.Black, new Rectangle(- 1, - 1, 1000, 1000));
 
             for (int i = 0; i < playfieldHeight; i++) 
             {

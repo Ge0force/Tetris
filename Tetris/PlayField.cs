@@ -5,29 +5,31 @@ namespace Tetris
     public class PlayField
     {
         public List<IShape> Field { get; set; }
-
         public IShape FallingShape { get; set; }
 
-        public int FieldWidth { get; set; }
-        public int FieldHeight { get; set; }
+        private int _fieldWidth { get; set; }
+        private int _fieldHeight { get; set; }
 
         private int _lastRandomNumber = 0;
+
+        private Random _rd = new Random();      // Important to re-use the same "random" object
 
         public PlayField(int width, int height)
         {
             Field = new List<IShape>();
 
-            FieldWidth = width;
-            FieldHeight = height;
+            _fieldWidth = width;
+            _fieldHeight = height;
 
-            SpawnRandomShape();
+            FallingShape = CreateRandomShape();
+            Field.Add(FallingShape);
         }
-        public bool CheckCollissons()
+        public bool NoCollisions()
         {
             // Check margins
             if (FallingShape.LeftMargin() <= 0 ) { return false; }
-            if (FallingShape.RightMargin() > FieldWidth) { return false; }
-            if (FallingShape.BottomMargin() >= FieldHeight) { return false; }
+            if (FallingShape.RightMargin() > _fieldWidth) { return false; }
+            if (FallingShape.BottomMargin() >= _fieldHeight) { return false; }
 
             // Check collision with other fallingShapes on the playfield:
             foreach (IShape s in Field)
@@ -56,14 +58,18 @@ namespace Tetris
 
         public void SpawnRandomShape()
         {
+            FallingShape = CreateRandomShape();           
+            Field.Add(FallingShape);
+        }
+        private IShape CreateRandomShape()
+        {
             // Roll random number between 0 and 7
-            Random rd = new Random();
-            int rand_num = rd.Next(0, 7);
+            int rand_num = _rd.Next(0, 7);
 
             // Reroll if result == 7 or result == previous result
             if (rand_num == 7 || rand_num == _lastRandomNumber)
             {
-                rand_num = rd.Next(0, 6);
+                rand_num = _rd.Next(0, 6);
             }
 
             _lastRandomNumber = rand_num;
@@ -71,25 +77,24 @@ namespace Tetris
             // Result of roll determines which shape
             switch (rand_num)
             {
-                case 0: FallingShape = new ShapeBar(); break;
-                case 1: FallingShape = new ShapeL(); break;
-                case 2: FallingShape = new ShapeReverseL(); break;
-                case 3: FallingShape = new ShapeStairsUp(); break;
-                case 4: FallingShape = new ShapeStairsDown(); break;
-                case 5: FallingShape = new ShapeSquare(); break;
-                default: FallingShape = new ShapeT(); break;
+                case 0: return new ShapeBar(); 
+                case 1: return new ShapeL(); 
+                case 2: return new ShapeReverseL(); 
+                case 3: return new ShapeStairsUp();
+                case 4: return new ShapeStairsDown(); 
+                case 5: return new ShapeSquare(); 
+                default: return new ShapeT(); 
             }
-
-            Field.Add(FallingShape);
         }
+
 
         public List<int> CheckFullLines()
         {
             var fullLines = new List<int>();
 
             // Check lines from top to bottom            
-            //for (int i = (FieldHeight - 1); i > 1; i--)
-            for (int i = 0; i < FieldHeight; i++)
+            //for (int i = (_fieldHeight - 1); i > 1; i--)
+            for (int i = 0; i < _fieldHeight; i++)
             {
                 // Count the number of points at line i
                 int counter = 0;
@@ -102,8 +107,8 @@ namespace Tetris
                     }
                 }
 
-                // Line is full if points = fieldwidth
-                if (counter == FieldWidth)
+                // Line is full if points = _fieldWidth
+                if (counter == _fieldWidth)
                 {
                     // Add to list for graphics animation
                     fullLines.Add(i);

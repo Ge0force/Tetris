@@ -15,20 +15,24 @@ namespace Tetris
         public const int _playfieldWidth = 10;
         public const int _playfieldHeight = 18;
 
-        private int _gameSpeed = 1000;
+        private int _gameSpeed;
 
         public TetrisGame(GraphicsService gs)
         {
             // Class that provides the graphics
             graphicsService = gs;
+
+            // Create playfield
+            _playfield = new PlayField(_playfieldWidth, _playfieldHeight);
+
+            // Initalize game timer
+            gameTimer = new System.Timers.Timer();
+            gameTimer.Elapsed += new ElapsedEventHandler(gameTimerTick);
         }
 
         // Start new game
         public void Start()
         {
-            // Create playfield
-            _playfield = new PlayField(_playfieldWidth, _playfieldHeight);
-            
             // Clear and draw playfield on the form
             graphicsService.DrawPlayfield(_playfieldWidth, _playfieldHeight);
 
@@ -38,9 +42,10 @@ namespace Tetris
             // Set gameloop state
             Running = true;
 
+            // Reset gamespeed:
+            _gameSpeed= 1000;
+
             // Start timer
-            gameTimer = new System.Timers.Timer();
-            gameTimer.Elapsed += new ElapsedEventHandler(gameTimerTick);
             gameTimer.Interval = _gameSpeed;
             gameTimer.Start();
         }
@@ -61,7 +66,7 @@ namespace Tetris
             _playfield.FallingShape.Position.Y += 1;
 
             // Check for collisions with other shapes and the playfield borders
-            if (_playfield.CheckCollissons())
+            if (_playfield.NoCollisions())
             {
                 graphicsService.DrawShape(_playfield.FallingShape);
             }
@@ -93,9 +98,9 @@ namespace Tetris
                     // Create new random shape
                     _playfield.SpawnRandomShape();
                     graphicsService.DrawShape(_playfield.FallingShape);
-                }
 
-                gameTimer.Start();
+                    gameTimer.Start();
+                }
 
             }
 
@@ -124,18 +129,18 @@ namespace Tetris
                     if (e.KeyCode == Keys.Left)
                     {
                         _playfield.FallingShape.Position.X -= 1;
-                        if (!_playfield.CheckCollissons()) { _playfield.FallingShape.Position.X += 1; }
+                        if (!_playfield.NoCollisions()) { _playfield.FallingShape.Position.X += 1; }
 
                     }
                     else if (e.KeyCode == Keys.Right)
                     {
                         _playfield.FallingShape.Position.X += 1;
-                        if (!_playfield.CheckCollissons()) { _playfield.FallingShape.Position.X -= 1; }
+                        if (!_playfield.NoCollisions()) { _playfield.FallingShape.Position.X -= 1; }
                     }
                     else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Space)
                     {
                         _playfield.FallingShape.Rotate();
-                        if (!_playfield.CheckCollissons()) { _playfield.FallingShape.Rotate(true); }
+                        if (!_playfield.NoCollisions()) { _playfield.FallingShape.Rotate(true); }
                     }
 
                     // Draw the falling shape
