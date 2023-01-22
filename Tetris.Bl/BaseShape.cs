@@ -1,4 +1,6 @@
-﻿namespace Tetris
+﻿using System.Drawing;
+
+namespace Tetris.BL
 {
     public abstract class BaseShape : IShape
     {
@@ -54,6 +56,11 @@
 
             }
         }
+
+        public void MoveUp() => Position.Y--;
+        public void MoveDown() => Position.Y++;
+        public void MoveLeft() => Position.X--;
+        public void MoveRight() => Position.X++;
 
     }
 

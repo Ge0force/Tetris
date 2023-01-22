@@ -1,6 +1,6 @@
-﻿using Tetris.Shapes;
+﻿using Tetris.BL.Shapes;
 
-namespace Tetris
+namespace Tetris.BL
 {
     public class PlayField
     {

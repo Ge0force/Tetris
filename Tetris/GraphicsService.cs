@@ -1,9 +1,10 @@
 ﻿using System.Drawing.Text;
-using static System.Windows.Forms.DataFormats;
+using Tetris.BL;
+using Point = Tetris.BL.Point;
 
 namespace Tetris
 {
-    public class GraphicsService
+    public class GraphicsService : IGraphicsService
     {
         private const int _blockSize = 35;
         private const int _leftMargin = 100;
@@ -54,9 +55,9 @@ namespace Tetris
 
         public void DrawPlayfield(int playfieldWidth, int playfieldHeight)
         {
-            _graphicsObj.FillRectangle(Brushes.Black, new Rectangle(- 1, - 1, 1000, 1000));
+            _graphicsObj.FillRectangle(Brushes.Black, new Rectangle(-1, -1, 1000, 1000));
 
-            for (int i = 0; i < playfieldHeight; i++) 
+            for (int i = 0; i < playfieldHeight; i++)
             {
                 DrawBrick(_leftMargin, (i * (_blockSize + 1)), (i % 2) == 0);
                 DrawBrick(_leftMargin + ((_blockSize + 1) * (playfieldWidth + 1)), (i * (_blockSize + 1)), (i % 2) == 0);
@@ -65,7 +66,7 @@ namespace Tetris
             _formObj.Invalidate();
         }
 
-        private void DrawBrick( int xPos, int yPos, bool odd)
+        private void DrawBrick(int xPos, int yPos, bool odd)
         {
             Pen grayPen = new Pen(Color.Gray);
             Pen darkRedPen = new Pen(Color.DarkRed);
@@ -123,7 +124,7 @@ namespace Tetris
             _graphicsObj.FillRectangle(Brushes.Black, rect);
 
             // Draw all shapes
-            foreach (var s in shapes) 
+            foreach (var s in shapes)
             {
                 DrawShape(s);
             }

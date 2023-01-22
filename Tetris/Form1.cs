@@ -1,4 +1,6 @@
-﻿namespace Tetris
+﻿using Tetris.BL;
+
+namespace Tetris
 {
     public partial class Form1 : Form
     {
@@ -29,8 +31,30 @@
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            // Handle keys pressed
-            _gameLoop.KeyDown(e);
+            if (_gameLoop.Running)
+            {
+                // Handle keys pressed
+                //_gameLoop.KeyDown(e);
+
+                switch (e.KeyCode)
+                {
+                    case Keys.Left:
+                        _gameLoop.KeyLeft();
+                        break;
+
+                    case Keys.Right:
+                        _gameLoop.KeyRight();
+                        break;
+
+                    case Keys.Up or Keys.Space:
+                        _gameLoop.KeyRotate();
+                        break;
+
+                    case Keys.Down:
+                        _gameLoop.KeyDrop();
+                        break;
+                }
+            }
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)

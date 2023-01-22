@@ -1,4 +1,4 @@
-﻿namespace Tetris
+﻿namespace Tetris.BL
 {
     public static class Utilities
     {

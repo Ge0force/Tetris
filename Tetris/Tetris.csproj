@@ -8,4 +8,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Tetris.Bl\Tetris.BL.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,6 @@
-﻿namespace Tetris
+﻿using System.Drawing;
+
+namespace Tetris.BL
 {
     public interface IShape
     {
@@ -19,5 +21,10 @@
         int RightMargin();
         int TopMargin();
         int BottomMargin();
+
+        void MoveUp();
+        void MoveDown();
+        void MoveLeft();
+        void MoveRight();
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Tetris.Shapes
+﻿using System.Drawing;
+
+namespace Tetris.BL.Shapes
 {
     public class ShapeStairsDown : BaseShape
     {
