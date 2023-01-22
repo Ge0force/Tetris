@@ -37,18 +37,18 @@ namespace Tetris
 
         public void DrawSingleBlock(int xPos, int yPos, Color penColor, Color brushColor)
         {
-            SolidBrush _myBrush = new SolidBrush(brushColor);
-            Pen _myPen = new Pen(penColor);
-
+            // Calculate position on the bitmap
             xPos = _leftMargin + ((xPos) * (_blockSize + 1));
             yPos = (yPos * (_blockSize + 1));
 
-            _myPen.Color = penColor;
-            _myBrush.Color = brushColor;
-
-            Rectangle rect = new Rectangle(xPos, yPos, _blockSize, _blockSize);
-            _graphicsObj.DrawRectangle(_myPen, rect);
-            _graphicsObj.FillRectangle(_myBrush, rect);
+            // Be sure to clean up disposable objects 
+            using (Pen _myPen = new Pen(penColor))
+            using (SolidBrush _myBrush = new SolidBrush(brushColor))
+            {
+                Rectangle rect = new Rectangle(xPos, yPos, _blockSize, _blockSize);
+                _graphicsObj.DrawRectangle(_myPen, rect);
+                _graphicsObj.FillRectangle(_myBrush, rect);
+            }
 
             _formObj.Invalidate();
         }
@@ -68,31 +68,30 @@ namespace Tetris
 
         private void DrawBrick(int xPos, int yPos, bool odd)
         {
-            Pen grayPen = new Pen(Color.Gray);
-            Pen darkRedPen = new Pen(Color.DarkRed);
+            // Be sure to clean up disposable objects 
+            using (Pen grayPen = new Pen(Color.Gray))
+            { 
+                grayPen.Width = 2;
 
-            grayPen.Width = 2;
+                Rectangle rect = new Rectangle(xPos, yPos, _blockSize, _blockSize);
+                Rectangle rect2 = new Rectangle(xPos + 1, yPos + 1, _blockSize - 2, _blockSize - 2);
 
-            SolidBrush darkRedBrush = new SolidBrush(Color.DarkRed);
+                _graphicsObj.DrawRectangle(Pens.DarkRed, rect);
+                _graphicsObj.FillRectangle(Brushes.DarkRed, rect);
 
-            Rectangle rect = new Rectangle(xPos, yPos, _blockSize, _blockSize);
-            Rectangle rect2 = new Rectangle(xPos + 1, yPos + 1, _blockSize - 2, _blockSize - 2);
+                _graphicsObj.DrawLine(grayPen, xPos, yPos, xPos + _blockSize, yPos);
 
-            _graphicsObj.DrawRectangle(darkRedPen, rect);
-            _graphicsObj.FillRectangle(darkRedBrush, rect);
+                if (odd)
+                {
+                    _graphicsObj.DrawLine(grayPen, xPos + (_blockSize / 2), yPos, xPos + (_blockSize / 2), yPos + _blockSize);
+                }
+                else
+                {
+                    _graphicsObj.DrawLine(grayPen, xPos + (_blockSize / 5), yPos, xPos + (_blockSize / 5), yPos + _blockSize);
+                    _graphicsObj.DrawLine(grayPen, xPos + (_blockSize / 5 * 4), yPos, xPos + (_blockSize / 5 * 4), yPos + _blockSize);
+                }
 
-            _graphicsObj.DrawLine(grayPen, xPos, yPos, xPos + _blockSize, yPos);
-
-            if (odd)
-            {
-                _graphicsObj.DrawLine(grayPen, xPos + (_blockSize / 2), yPos, xPos + (_blockSize / 2), yPos + _blockSize);
             }
-            else
-            {
-                _graphicsObj.DrawLine(grayPen, xPos + (_blockSize / 5), yPos, xPos + (_blockSize / 5), yPos + _blockSize);
-                _graphicsObj.DrawLine(grayPen, xPos + (_blockSize / 5 * 4), yPos, xPos + (_blockSize / 5 * 4), yPos + _blockSize);
-            }
-
         }
 
         public void DisplayGameOver()
