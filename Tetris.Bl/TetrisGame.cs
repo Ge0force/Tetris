@@ -17,6 +17,11 @@ namespace Tetris.BL
 
         private int _gameSpeed;
 
+        public enum TetrisKeys
+        {
+            KeyLeft, KeyRight, KeyUp, KeyDown
+        }
+
         public TetrisGame(IGraphicsService gs)
         {
             // Class that provides the graphics
@@ -38,6 +43,9 @@ namespace Tetris.BL
 
             // Draw the falling shape
             _graphicsService.DrawShape(_playfield.FallingShape);
+
+            // Draw the next shape
+            _graphicsService.DrawNextShape(_playfield.NextShape);
 
             // Set gameloop state
             Running = true;
@@ -98,6 +106,7 @@ namespace Tetris.BL
                     // Create new random shape
                     _playfield.SpawnRandomShape();
                     _graphicsService.DrawShape(_playfield.FallingShape);
+                    _graphicsService.DrawNextShape(_playfield.NextShape);
 
                     _gameTimer.Start();
                 }
@@ -107,26 +116,34 @@ namespace Tetris.BL
         }
 
         // Keyboard input
-        public void KeyLeft()
+        public void KeyDown(TetrisKeys tetrisKeys)
         {
             _graphicsService.EraseShape(_playfield.FallingShape);
-            _playfield.FallingShape.MoveLeft();
-            if (!_playfield.NoCollisions()) { _playfield.FallingShape.MoveRight(); }
+
+            switch (tetrisKeys)
+            {
+                case TetrisKeys.KeyLeft:
+                    _playfield.FallingShape.MoveLeft();
+                    if (!_playfield.NoCollisions()) { _playfield.FallingShape.MoveRight(); }
+                    break;
+
+                case TetrisKeys.KeyRight:
+                    _playfield.FallingShape.MoveRight();
+                    if (!_playfield.NoCollisions()) { _playfield.FallingShape.MoveLeft(); }
+                    break;
+
+                case TetrisKeys.KeyUp:
+                    _playfield.FallingShape.Rotate();
+                    if (!_playfield.NoCollisions()) { _playfield.FallingShape.Rotate(true); }
+                    break;
+            }
+
             _graphicsService.DrawShape(_playfield.FallingShape);
         }
-
-        public void KeyRight()
-        {
-            _graphicsService.EraseShape(_playfield.FallingShape);
-            _playfield.FallingShape.MoveRight();
-            if (!_playfield.NoCollisions()) { _playfield.FallingShape.MoveLeft(); }
-            _graphicsService.DrawShape(_playfield.FallingShape);
-        }
-
+              
         public void KeyDrop()
         {
-            // Drop the falling shape immediately
-            // Falling shape is redrawn in the DropFallingShape method!
+            // Drop the falling shape and redraw
             DropFallingShape();
 
             // Reset _gameTimer
@@ -134,13 +151,7 @@ namespace Tetris.BL
             _gameTimer.Start();
         }
 
-        public void KeyRotate()
-        {
-            _graphicsService.EraseShape(_playfield.FallingShape);
-            _playfield.FallingShape.Rotate();
-            if (!_playfield.NoCollisions()) { _playfield.FallingShape.Rotate(true); }
-            _graphicsService.DrawShape(_playfield.FallingShape);
-        }
+
        
     }
 }

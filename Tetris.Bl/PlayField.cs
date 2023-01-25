@@ -6,7 +6,7 @@ namespace Tetris.BL
     {
         public List<IShape> Field { get; set; }
         public IShape FallingShape { get; set; }
-
+        public IShape NextShape { get; set; }
         private int _fieldWidth { get; set; }
         private int _fieldHeight { get; set; }
 
@@ -21,6 +21,7 @@ namespace Tetris.BL
             _fieldWidth = width;
             _fieldHeight = height;
 
+            NextShape = CreateRandomShape();
             FallingShape = CreateRandomShape();
             Field.Add(FallingShape);
         }
@@ -58,8 +59,9 @@ namespace Tetris.BL
 
         public void SpawnRandomShape()
         {
-            FallingShape = CreateRandomShape();           
+            FallingShape = NextShape;
             Field.Add(FallingShape);
+            NextShape = CreateRandomShape();
         }
         private IShape CreateRandomShape()
         {

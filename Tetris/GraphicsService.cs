@@ -1,5 +1,6 @@
 ﻿using System.Drawing.Text;
 using Tetris.BL;
+using static System.Windows.Forms.DataFormats;
 using Point = Tetris.BL.Point;
 
 namespace Tetris
@@ -35,6 +36,26 @@ namespace Tetris
             }
         }
 
+        public void DrawNextShape(IShape shape)
+        {
+            // Clear previous shape            
+            _graphicsObj.FillRectangle(Brushes.Black, new Rectangle(_leftMargin + (_blockSize * 15) , (_blockSize * 1) ,  170, 150));
+
+            _graphicsObj.DrawString("NEXT :", new Font("Tahoma", 14), Brushes.White, _leftMargin + (_blockSize * 16), (int)(_blockSize * 1.7));
+
+            int extraMarginTop = 0; 
+            int extraMarginLeft = 0;
+
+            if(shape.Pattern.YMax < 2) extraMarginTop = 1;
+            if(shape.Pattern.XMax < 2) extraMarginLeft = 1;
+
+            foreach (Point p in shape.Pattern)
+            {
+                DrawSingleBlock(p.X + 15 + extraMarginLeft, p.Y + 2 + extraMarginTop, shape.PenColor, shape.BrushColor);
+            }
+
+        }
+
         public void DrawSingleBlock(int xPos, int yPos, Color penColor, Color brushColor)
         {
             // Calculate position on the bitmap
@@ -55,8 +76,10 @@ namespace Tetris
 
         public void DrawPlayfield(int playfieldWidth, int playfieldHeight)
         {
+            // Clear the screen            
             _graphicsObj.FillRectangle(Brushes.Black, new Rectangle(-1, -1, 1000, 1000));
 
+            // Draw bricks
             for (int i = 0; i < playfieldHeight; i++)
             {
                 DrawBrick(_leftMargin, (i * (_blockSize + 1)), (i % 2) == 0);
@@ -93,7 +116,6 @@ namespace Tetris
 
             }
         }
-
         public void DisplayGameOver()
         {
             _graphicsObj.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;

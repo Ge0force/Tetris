@@ -34,20 +34,18 @@ namespace Tetris
             if (_gameLoop.Running)
             {
                 // Handle keys pressed
-                //_gameLoop.KeyDown(e);
-
                 switch (e.KeyCode)
                 {
                     case Keys.Left:
-                        _gameLoop.KeyLeft();
+                        _gameLoop.KeyDown(TetrisGame.TetrisKeys.KeyLeft);
                         break;
 
                     case Keys.Right:
-                        _gameLoop.KeyRight();
+                        _gameLoop.KeyDown(TetrisGame.TetrisKeys.KeyRight);
                         break;
 
                     case Keys.Up or Keys.Space:
-                        _gameLoop.KeyRotate();
+                        _gameLoop.KeyDown(TetrisGame.TetrisKeys.KeyUp);
                         break;
 
                     case Keys.Down:

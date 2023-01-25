@@ -7,15 +7,15 @@ namespace Tetris.BL
         public Point Position { get; set; }
         public int Rotation { get; set; }
         public int MaxRotation { get; set; }
-        public List<Point> Pattern { get; set; } = new List<Point>();
+        public Pattern Pattern { get; set; } = new Pattern();
         public Point Pivot { get; set; }
         public Color PenColor { get; set; }
         public Color BrushColor { get; set; }
 
-        public int LeftMargin() => Position.X + Pattern.Min(point => point.X);
-        public int RightMargin() => Position.X + Pattern.Max(point => point.X);
-        public int TopMargin() => Position.Y + Pattern.Min(point => point.Y);
-        public int BottomMargin() => Position.Y + Pattern.Max(point => point.Y);
+        public int LeftMargin() => Position.X + Pattern.XMin;
+        public int RightMargin() => Position.X + Pattern.XMax;
+        public int TopMargin() => Position.Y + Pattern.YMin;
+        public int BottomMargin() => Position.Y + Pattern.YMax;
 
         // Protected constructor only allows inherritance, no instances
         protected BaseShape(Point position, int rotation, int maxRotation, Point pivot, Color penColor, Color brushColor)
@@ -52,7 +52,8 @@ namespace Tetris.BL
                 if (MaxRotation == 1 && Rotation == 0)
                     angle = -angle;
 
-                Pattern = Utilities.RotatePattern(Pattern, Pivot, angle);
+                //Pattern = Utilities.RotatePattern(Pattern, Pivot, angle);
+                Pattern.RotatePattern(Pivot, angle);
 
             }
         }

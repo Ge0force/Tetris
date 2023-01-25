@@ -10,7 +10,7 @@ namespace Tetris.BL
         int Rotation { get; set; }          // Current rotation 
         int MaxRotation { get; set; }       // Times the shape can be rotated before resetting to original postion
 
-        List<Point> Pattern { get; set; }  // Pattern of the shape containing Points
+        Pattern Pattern { get; set; }       // Pattern of the shape containing Points
 
         Color PenColor { get; set; }        // Line color
         Color BrushColor { get; set; }      // Fill color
